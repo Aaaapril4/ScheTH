@@ -58,6 +58,15 @@ def _get_date_begin_end(begindate, enddate, interval, buffer, rest):
 
 
 
+def _timesetting(para):
+    setting = para["PARAMETER"].get("deadline or day")
+    if setting.lower() == "deadline":
+        return "deadline"
+    elif setting.lower() == "day":
+        return "when"
+
+
+
 def todo_url(work_date, distribution, para):
     '''
     Generate todo from url
@@ -75,9 +84,14 @@ def todo_url(work_date, distribution, para):
     string = ""
     prefix = para["NAME"].get("prefix")
     suffix = para["NAME"].get("suffix")
+    projectname = para["BASIC"].get("project").replace(' ','%20')
+    notes = para["PARAMETER"].get("notes").replace(' ','%20')
+    timesetting = _timesetting(para)
 
     for i in range(len(distribution)):
-        url = 'things:///add?title={}&when={}&list={}'.format(f'{prefix} {distribution[i]} {suffix}'.replace(' ', '%20'), work_date[i], para["BASIC"].get("project").replace(' ','%20'))
+        title = f'{prefix} {distribution[i]} {suffix}'.replace(' ', '%20')
+        
+        url = f'things:///add?title={title}&{timesetting}={work_date[i]}&list={projectname}&notes={notes}'
         webbrowser.open(url)
     
     return
