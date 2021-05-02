@@ -28,6 +28,19 @@ def _num_distribute(begin, end, eachday, binn):
 
 
 
+def _get_rest_num(i, interval, rest_index):
+    total = 0
+    end = i + interval + 1
+    while i <= end:
+        if i % 7 in rest_index:
+            total = total + 1
+        i = i + 1
+    
+    return total
+
+
+
+
 def _get_date_begin_end(begindate, enddate, interval, buffer, rest):
     '''
     Calculate the work time according to the begin and end time
@@ -47,12 +60,13 @@ def _get_date_begin_end(begindate, enddate, interval, buffer, rest):
     work_date = []
     total = (enddate - begindate).days - buffer
     i = 0
+
+    while i in rest_index:
+        i = i + 1
+
     while i <= total:
-        if i % 7 not in rest_index:
-            work_date.append((begindate + dt.timedelta(i)).isoformat())
-            i = i + 1 + interval
-        else:
-            i = i + 1
+        work_date.append((begindate + dt.timedelta(i)).isoformat())
+        i = i + 1 + interval + _get_rest_num(i, interval, rest_index)
 
     return work_date
 
