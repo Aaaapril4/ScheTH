@@ -3,7 +3,7 @@
 
 ## Usage
 To run the script, just
-1. Modify the `para.ini` file
+1. Copy `para_template.ini` as `para.ini` and modify the `para.ini` file
 2. Run `main.py` in the same directory with the parameter file
 
-## Document
+## Features
