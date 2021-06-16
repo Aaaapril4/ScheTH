@@ -2,10 +2,10 @@ import datetime as dt
 import webbrowser
 import configparser
 import sys
+import random
 
 
-
-def _num_distribute(begin, end, eachday, binn):
+def _num_distribute(begin, end, eachday, binn, rand):
     '''
     Calculate the number in each bin
     Return:
@@ -13,16 +13,18 @@ def _num_distribute(begin, end, eachday, binn):
     '''
 
     if eachday != "":
-        eachday = int(eachday)
-        distribution = list(range(begin-1, end, eachday))
+        each = int(eachday)
     else:    
         total = end - begin + 1
         each = total // binn + int(bool(total % binn))
-        distribution = list(range(begin-1, end, each))
     
-    if end not in distribution:
-        distribution.append(end)
-    distribution.pop(0)
+    if rand:
+        lst = list(range(begin, end+1))
+        random.shuffle(lst)
+        distribution = [lst[i:i+each] for i in range(0,len(lst),each)]
+    else:
+        distribution = list(range(begin+each-1, end, each))
+        (end not in distribution) and (distribution.append(end))
 
     return distribution
 
@@ -107,6 +109,18 @@ def create_project(para):
 
 
 
+def open_url(title, workdate, projectname, notes, timesetting):
+    try:
+        url = f'things:///add?title={title}&{timesetting}={workdate}&list={projectname}&notes={notes}'
+    except IndexError:
+        sys.exit(f"You need more days to complete.")
+            
+    webbrowser.open(url)
+
+    return
+
+
+
 def todo_url(work_date, distribution, para):
     '''
     Generate todo from url
@@ -124,14 +138,14 @@ def todo_url(work_date, distribution, para):
     timesetting = _timesetting(para)
 
     for i in range(len(distribution)):
-        title = f'{prefix} {distribution[i]} {suffix}'.replace(' ', '%20')
+        if type(distribution[i]) == list:
+            for j in range(len(distribution[i])):
+                title = f'{prefix} {distribution[i][j]} {suffix}'.replace(' ', '%20')
+                open_url(title, work_date[i], projectname, notes, timesetting)
+        else:
+            title = f'{prefix} {distribution[i]} {suffix}'.replace(' ', '%20')
+            open_url(title, work_date[i], projectname, notes, timesetting)
         
-        try:
-            url = f'things:///add?title={title}&{timesetting}={work_date[i]}&list={projectname}&notes={notes}'
-        except IndexError:
-            sys.exit(f"You need {len(distribution)-i} more day to complete.")
-        webbrowser.open(url)
-    
     return
     
 
@@ -150,7 +164,7 @@ def config(para):
     else:
         sys.exit("Need to define begin-end or fix-interval")
 
-    distribution = _num_distribute(int(para["CONTENT"].get("begin")), int(para["CONTENT"].get("end")), para["CONTENT"].get("eachday"), len(work_date))
+    distribution = _num_distribute(int(para["CONTENT"].get("begin")), int(para["CONTENT"].get("end")), para["CONTENT"].get("eachday"), len(work_date), para["DISTRIBUTED"].getboolean("random"))
 
     todo_url(work_date, distribution, para)
 
