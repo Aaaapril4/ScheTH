@@ -12,7 +12,7 @@ def _num_distribute(begin, end, eachday, binn, rand):
         list of the end of each bin
     '''
 
-    if eachday != "":
+    if eachday:
         each = int(eachday)
     else:    
         total = end - begin + 1
@@ -70,8 +70,6 @@ def _get_date_begin_end(begindate, enddate, interval, buffer, rest):
         A list of work date
     '''
 
-    interval = int(interval) if interval != '' else 0
-    buffer = int(buffer) if buffer != '' else 0
     rest_index = _get_rest_index(rest, begindate)
     
     work_date = []
@@ -159,8 +157,11 @@ def config(para):
 
     begindate = dt.date.fromisoformat(para["DISTRIBUTED"].get("begindate"))
     enddate = dt.date.fromisoformat(para["DISTRIBUTED"].get("enddate"))
+    interval = int(para["DISTRIBUTED"].get("interval")) if para["DISTRIBUTED"].get("interval") != '' else 0
+    buffer = int(para["DISTRIBUTED"].get("buffer")) if para["DISTRIBUTED"].get("buffer") != '' else 0
+    
     if para["GENERATE TYPE"].get("type") == "distributed":
-        work_date = _get_date_begin_end(begindate, enddate, para["DISTRIBUTED"].get("interval"), int(para["DISTRIBUTED"].get("buffer")), para["DISTRIBUTED"].get("rest").lower().split(','))
+        work_date = _get_date_begin_end(begindate, enddate, interval, buffer, para["DISTRIBUTED"].get("rest").lower().split(','))
     else:
         sys.exit("Need to define begin-end or fix-interval")
 
