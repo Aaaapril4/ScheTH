@@ -1,3 +1,6 @@
 para.ini
 .vscode
 scheth/__pycache__
+build
+dist
+scheth.egg-info
