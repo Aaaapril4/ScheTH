@@ -22,6 +22,8 @@ def _cal_bin(para, binn = 1):
 def content_dist(para, binn = 1):
     '''
     Calculate the load of content for each day
+    Parameter:
+        para["CONTENT"]
     Return:
         Load distribution with time
     '''

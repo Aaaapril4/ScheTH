@@ -10,7 +10,7 @@ def check_num(para, group, key):
 
 
 
-def config():
+def config(path_to_para):
     '''
     Read and validate parameters
     Return:
@@ -18,7 +18,7 @@ def config():
     '''
 
     para = configparser.ConfigParser()
-    para.read("para.ini")
+    para.read(path_to_para)
 
     if not para["PROJECT"].get("create_project"):
         para["PROJECT"]["create_project"] = "False"
