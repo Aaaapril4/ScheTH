@@ -1,2 +1,2 @@
 __all__ = ['main']
-from . import main
+from scheth.main import main
