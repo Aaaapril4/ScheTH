@@ -9,10 +9,10 @@ def _cal_bin(para, binn = 1):
     Return:
         num for each day
     '''
-    if para["CONTENT"].get("eachday"):
-        each = para["CONTENT"].getint("eachday")
+    if para.get("eachday"):
+        each = para.getint("eachday")
     else:
-        total = para["CONTENT"].getint("end") - para["CONTENT"].getint("begin") + 1
+        total = para.getint("end") - para.getint("begin") + 1
         each = total // binn + int(bool(total % binn))
 
     return each
@@ -29,10 +29,10 @@ def content_dist(para, binn = 1):
     '''
     
     each = _cal_bin(para, binn)
-    begin = para["CONTENT"].getint("begin")
-    end = para["CONTENT"].getint("end")
+    begin = para.getint("begin")
+    end = para.getint("end")
 
-    if para["CONTENT"].getboolean("random"):
+    if para.getboolean("random"):
         lst = list(range(begin, end+1))
         random.shuffle(lst)
         dist = [lst[i:i+each] for i in range(0,len(lst),each)]

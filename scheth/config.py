@@ -23,28 +23,25 @@ def config(path_to_para):
     if not para["PROJECT"].get("create_project"):
         para["PROJECT"]["create_project"] = "False"
     
-    if not para["PROJECT"].get["Project_Name"]:
+    if not para["PROJECT"].get("project"):
         para["PROJECT"]["create_project"] = "False"
 
-    if not para["TODOINFO"].get["deadline or day"]:
+    if not para["TODOINFO"].get("deadline or day"):
         sys.exit("deadline or day must be specified")
 
-    if not para["CONTENT"].get["begin"] or not para["CONTENT"].get["end"]:
+    if not para["CONTENT"].get("begin") or not para["CONTENT"].get("end"):
         sys.exit("Begin and end of the content must be specified")
 
-    if not para["TIME"].get["begindate"]:
+    if not para["TIME"].get("begindate"):
         sys.exit("Begindate must be specified")
 
-    if not para["GENERATE TYPE"].get["type"]:
+    if not para["GENERATE TYPE"].get("type"):
         sys.exit("Type must be specified")
 
-    if not para["TIME"].get["enddate"] and not para["CONTENT"].get["eachday"]:
+    if not para["TIME"].get("enddate") and not para["CONTENT"].get("eachday"):
         sys.exit("enddate or eachday load must be specified at least one")
 
     para = check_num(para, "DISTRIBUTED", "interval")
     para = check_num(para, "DISTRIBUTED", "buffer")
 
     return para
-
-if __name__ == "__main__":
-    config()

@@ -33,7 +33,7 @@ def _projectsetting(para):
     '''
     string = ""
     if para["PROJECT"].get("project"):
-        string = "&.join"((string, f'area={para["PROJECT"].get("project")}'.replace(' ', '%20') ))
+        string = "&".join((string, f'list={para["PROJECT"].get("project")}'.replace(' ', '%20') ))
 
     return string
 

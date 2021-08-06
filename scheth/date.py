@@ -27,7 +27,6 @@ def _get_rest_num(i, interval, rest_index):
 
 
 
-
 def _get_rest_index(rest, begindate):
     '''
     Calculate the the index of rest days, begindate as 0
@@ -46,7 +45,40 @@ def _get_rest_index(rest, begindate):
 
 
 
-def get_date_begin_end_distributed(para_time, para_generate, len = 1):
+
+def _distribute_time(begindate, interval,total, rest_index):
+    work_date = []
+    
+    i = 0
+
+    while i in rest_index:
+        i = i + 1
+
+    while i <= total:
+        work_date.append((begindate + dt.timedelta(i)).isoformat())
+        i = i + 1 + interval + _get_rest_num(i, interval, rest_index)
+
+    return work_date
+
+
+
+def _distribute_specific(begindate, interval, total, rest_index):
+    work_date = []
+    
+    i = 0
+
+    while i in rest_index:
+        i = i + 1
+
+    while len(work_date) < total:
+        work_date.append((begindate + dt.timedelta(i)).isoformat())
+        i = i + 1 + interval + _get_rest_num(i, interval, rest_index)
+
+    return work_date
+
+
+
+def get_date_begin_end_distributed(para_time, para_generate, total = 1):
     '''
     Calculate the work time
     Parameters:
@@ -58,21 +90,16 @@ def get_date_begin_end_distributed(para_time, para_generate, len = 1):
     '''
 
     begindate = dt.date.fromisoformat(para_time.get("begindate"))
+    rest_index = _get_rest_index(_remove_null(para_generate.get("rest").lower().split(',')), begindate)
+    interval = para_generate.getint("interval")
+
     if para_time.get("enddate"):
         enddate = dt.date.fromisoformat(para_time.get("enddate"))
-        len = (enddate - begindate).days - para_time.getint("buffer")
+        total = (enddate - begindate).days - para_time.getint("buffer")
 
-    rest_index = _get_rest_index(_remove_null(para_generate.get("rest").lower().split(',')), begindate)
+        work_date = _distribute_time(begindate, interval,total, rest_index)
+    else:
+        work_date = _distribute_specific(begindate, interval,total, rest_index)
     
-    work_date = []
-    
-    i = 0
-
-    while i in rest_index:
-        i = i + 1
-
-    while i <= len:
-        work_date.append((begindate + dt.timedelta(i)).isoformat())
-        i = i + 1 + para_generate.getint("interval") + _get_rest_num(i, para_generate.getint("interval"), rest_index)
 
     return work_date
