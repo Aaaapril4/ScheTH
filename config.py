@@ -1,24 +1,50 @@
 import configparser
+import sys
 
-def config(para):
+def check_num(para, group, key):
+
+    if not para[group].get(key):
+        para[group][key] = "0"
+
+    return para
+
+
+
+def config():
     '''
-    The main function
+    Read and validate parameters
     Return:
-        None
+        para
     '''
 
-    begindate = dt.date.fromisoformat(para["DISTRIBUTED"].get("begindate"))
-    enddate = dt.date.fromisoformat(para["DISTRIBUTED"].get("enddate"))
-    interval = int(para["DISTRIBUTED"].get("interval")) if para["DISTRIBUTED"].get("interval") != '' else 0
-    buffer = int(para["DISTRIBUTED"].get("buffer")) if para["DISTRIBUTED"].get("buffer") != '' else 0
+    para = configparser.ConfigParser()
+    para.read("para.ini")
+
+    if not para["PROJECT"].get("create_project"):
+        para["PROJECT"]["create_project"] = "False"
     
-    if para["GENERATE TYPE"].get("type") == "distributed":
-        work_date = _get_date_begin_end(begindate, enddate, interval, buffer, para["DISTRIBUTED"].get("rest").lower().split(','))
-    else:
-        sys.exit("Need to define begin-end or fix-interval")
+    if not para["PROJECT"].get["Project_Name"]:
+        para["PROJECT"]["create_project"] = "False"
 
-    distribution = _num_distribute(int(para["CONTENT"].get("begin")), int(para["CONTENT"].get("end")), para["CONTENT"].get("eachday"), len(work_date), para["DISTRIBUTED"].getboolean("random"))
+    if not para["TODOINFO"].get["deadline or day"]:
+        sys.exit("deadline or day must be specified")
 
-    todo_url(work_date, distribution, para)
+    if not para["CONTENT"].get["begin"] or not para["CONTENT"].get["end"]:
+        sys.exit("Begin and end of the content must be specified")
 
-    return
+    if not para["TIME"].get["begindate"]:
+        sys.exit("Begindate must be specified")
+
+    if not para["GENERATE TYPE"].get["type"]:
+        sys.exit("Type must be specified")
+
+    if not para["TIME"].get["enddate"] and not para["CONTENT"].get["eachday"]:
+        sys.exit("enddate or eachday load must be specified at least one")
+
+    para = check_num(para, "DISTRIBUTED", "interval")
+    para = check_num(para, "DISTRIBUTED", "buffer")
+
+    return para
+
+if __name__ == "__main__":
+    config()
