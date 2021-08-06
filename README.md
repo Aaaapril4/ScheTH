@@ -1,9 +1,21 @@
-# Script_things3
-🛑 Easily and fast, generate and modify todos in [things 3](https://culturedcode.com/things/)
+`This project is still under constructure`
+# Scheth
+Generate a detailed study plan (for course, book, etc.) in things
+
+## Current features
+- Create a series of todos with eachday load for a time period
+- Calculate the everyday load and generate todos
+- Generate todos for a content randomly
 
 ## Usage
-To run the script, just
-1. Copy `para_template.ini` as `para.ini` and modify the `para.ini` file
-2. Run `main.py` in the same directory with the parameter file
+In terminal, move to the directory and install the package
+```
+cd path_to_directory
+python3 setup.py install
+```
 
-## Features
+Then, modify the parameter file (`para.ini`) and run the main function
+```
+from scheth import main
+main('path_to_file/filename')
+```
