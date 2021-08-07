@@ -1,12 +1,23 @@
 import configparser
 import sys
 
-def check_num(para, group, key):
+def _check_num(para, group, key):
 
     if not para[group].get(key):
         para[group][key] = "0"
 
     return para
+
+
+
+def _remove_null(string):
+    '''
+    Remove all " " in list
+    '''
+    string = string.replace(" ", "")
+    
+    return string
+
 
 
 
@@ -41,7 +52,19 @@ def config(path_to_para):
     if not para["TIME"].get("enddate") and not para["CONTENT"].get("eachday"):
         sys.exit("enddate or eachday load must be specified at least one")
 
-    para = check_num(para, "DISTRIBUTED", "interval")
-    para = check_num(para, "DISTRIBUTED", "buffer")
+    if para["DISTRIBUTED"].get("rest"):
+        string = _remove_null(para["DISTRIBUTED"].get("rest"))
+        para["DISTRIBUTED"]["rest"] = string.lower()
+    
+    if para["DISTRIBUTED"].get("rest"):
+        string = _remove_null(para["DISTRIBUTED"].get("rest"))
+        para["DISTRIBUTED"]["rest"] = string.lower()
+
+    if para["SPECIFIC"].get("week day"):
+        string = _remove_null(para["SPECIFIC"].get("week day"))
+        para["SPECIFIC"]["week day"] = string.lower()
+
+    para = _check_num(para, "DISTRIBUTED", "interval")
+    para = _check_num(para, "DISTRIBUTED", "buffer")
 
     return para

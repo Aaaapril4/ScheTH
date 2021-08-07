@@ -1,17 +1,5 @@
 import datetime as dt
 
-
-def _remove_null(list):
-    '''
-    Remove all "" in list
-    '''
-    while "" in list:
-        list.remove("")
-    
-    return list
-
-
-
 def _get_rest_num(i, interval, rest_index):
     '''
     Check the num of rest days in days [i, i+interval+1]
@@ -47,6 +35,9 @@ def _get_rest_index(rest, begindate):
 
 
 def _distribute_time(begindate, interval,total, rest_index):
+    '''
+    For distributed with enddate
+    '''
     work_date = []
     
     i = 0
@@ -63,6 +54,9 @@ def _distribute_time(begindate, interval,total, rest_index):
 
 
 def _distribute_specific(begindate, interval, total, rest_index):
+    '''
+    For distributed without enddate
+    '''
     work_date = []
     
     i = 0
@@ -74,6 +68,40 @@ def _distribute_specific(begindate, interval, total, rest_index):
         work_date.append((begindate + dt.timedelta(i)).isoformat())
         i = i + 1 + interval + _get_rest_num(i, interval, rest_index)
 
+    return work_date
+
+
+
+def _specific_time(begindate, total, dayindex):
+    '''
+    For specific with enddate
+    '''
+    work_date = []
+
+    i = dayindex[0]
+
+    while i <= total:
+        if i % 7 in dayindex:
+            work_date.append((begindate + dt.timedelta(i)).isoformat())
+        i = i + 1
+    
+    return work_date
+
+
+
+def _specific_specific(begindate, total, dayindex):
+    '''
+    For specific without enddate
+    '''
+    work_date = []
+
+    i = dayindex[0]
+
+    while len(work_date) <= total:
+        if i % 7 in dayindex:
+            work_date.append((begindate + dt.timedelta(i)).isoformat())
+        i = i + 1
+    
     return work_date
 
 
@@ -90,7 +118,7 @@ def get_date_begin_end_distributed(para_time, para_generate, total = 1):
     '''
 
     begindate = dt.date.fromisoformat(para_time.get("begindate"))
-    rest_index = _get_rest_index(_remove_null(para_generate.get("rest").lower().split(',')), begindate)
+    rest_index = _get_rest_index(para_generate.get("rest").split(','), begindate)
     interval = para_generate.getint("interval")
 
     if para_time.get("enddate"):
@@ -101,5 +129,32 @@ def get_date_begin_end_distributed(para_time, para_generate, total = 1):
     else:
         work_date = _distribute_specific(begindate, interval,total, rest_index)
     
+
+    return work_date
+
+
+
+def get_date_begin_end_specific(para_time, para_generate, total = 1):
+    '''
+    Calculate the work time
+    Parameters:
+        para["TIME"]
+        para["DISTRIBUTED"]
+        length of load list
+    Return:
+        A list of date for each load
+    '''
+
+    begindate = dt.date.fromisoformat(para_time.get("begindate"))
+    dayindex = _get_rest_index(para_generate.get("week day").split(','), begindate)
+    dayindex.sort()
+
+    if para_time.get("enddate"):
+        enddate = dt.date.fromisoformat(para_time.get("enddate"))
+        total = (enddate - begindate).days - para_time.getint("buffer")
+
+        work_date = _specific_time(begindate, total, dayindex)
+    else:
+        work_date = _specific_specific(begindate, total, dayindex)
 
     return work_date

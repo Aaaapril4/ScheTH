@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="scheth",
-    version="0.0.1",
+    version="0.0.2",
     author="YJie",
     author_email="jieyaqi@msu.edu",
     description="A package for generating detailed study plan",
