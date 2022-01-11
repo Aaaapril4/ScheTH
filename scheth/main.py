@@ -1,5 +1,3 @@
-import webbrowser
-import sys
 from .config import config
 from .content import content_dist
 from .date import get_date_begin_end_distributed, get_date_begin_end_specific
@@ -25,5 +23,5 @@ def main(path_to_para):
     
     todo_url(work_date, distribution, para)
 
-    if __import__ == "__main__":
-        main("para.ini")
+if __name__ == "__main__":
+    main("para.ini")

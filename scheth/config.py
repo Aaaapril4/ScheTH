@@ -65,6 +65,6 @@ def config(path_to_para):
         para["SPECIFIC"]["week day"] = string.lower()
 
     para = _check_num(para, "DISTRIBUTED", "interval")
-    para = _check_num(para, "DISTRIBUTED", "buffer")
+    para = _check_num(para, "TIME", "buffer")
 
     return para
