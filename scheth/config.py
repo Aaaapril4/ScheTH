@@ -55,10 +55,6 @@ def config(path_to_para):
     if para["DISTRIBUTED"].get("rest"):
         string = _remove_null(para["DISTRIBUTED"].get("rest"))
         para["DISTRIBUTED"]["rest"] = string.lower()
-    
-    if para["DISTRIBUTED"].get("rest"):
-        string = _remove_null(para["DISTRIBUTED"].get("rest"))
-        para["DISTRIBUTED"]["rest"] = string.lower()
 
     if para["SPECIFIC"].get("week day"):
         string = _remove_null(para["SPECIFIC"].get("week day"))

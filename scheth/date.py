@@ -118,7 +118,10 @@ def get_date_begin_end_distributed(para_time, para_generate, total = 1):
     '''
 
     begindate = dt.date.fromisoformat(para_time.get("begindate"))
-    rest_index = _get_rest_index(para_generate.get("rest").split(','), begindate)
+    if para_generate.get("rest"):
+        rest_index = _get_rest_index(para_generate.get("rest").split(','), begindate)
+    else:
+        rest_index = []
     interval = para_generate.getint("interval")
 
     if para_time.get("enddate"):
