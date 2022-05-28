@@ -16,6 +16,6 @@ python3 setup.py install
 
 Then, modify the parameter file (`para.ini`) and run the main function
 ```
-from scheth import main
+from scheth import scheth
 main('path_to_file/filename')
 ```
