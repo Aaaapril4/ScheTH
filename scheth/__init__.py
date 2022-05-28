@@ -1,2 +1,2 @@
-__all__ = ['main']
-from scheth.main import main
+__all__ = ['scheth']
+from scheth.scheth import scheth

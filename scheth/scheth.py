@@ -3,7 +3,7 @@ from .content import content_dist
 from .date import get_date_begin_end_distributed, get_date_begin_end_specific
 from .url import todo_url
 
-def main(path_to_para):
+def scheth(path_to_para):
     para = config(path_to_para)
     if para["GENERATE TYPE"].get("type").lower() == "distributed":
         if para["CONTENT"].get("eachday"):
@@ -24,4 +24,4 @@ def main(path_to_para):
     todo_url(work_date, distribution, para)
 
 if __name__ == "__main__":
-    main("para.ini")
+    scheth("para.ini")
