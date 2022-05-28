@@ -1,6 +1,5 @@
-`This project is still under constructure`
 # Scheth
-Generate a detailed study plan (for course, book, etc.) in things
+Generate a detailed study plan (for course, book, etc.) in things3
 
 ## Current features
 - Create a series of todos with eachday load for a time period
